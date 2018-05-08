@@ -10,7 +10,7 @@
                 [speedx 0]              [speedy 0]
                 [gravity 0]             
                 [color "ff0000"]        [armor 0]
-                [sizex 50]              [sizey 200]
+                [sizex 50]              [sizey 60]
                 [posx 0]                [posy 0])
 
     (define/public (get-name) name)
