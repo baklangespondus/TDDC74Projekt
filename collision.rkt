@@ -1,5 +1,7 @@
 #lang racket
 (require "player.rkt")
+(require "platform.rkt")
+(require "main.rkt")
 (provide (all-defined-out))
 
 (define (collision)
@@ -8,16 +10,30 @@
          (hash-set! i-x p1
                     `(,(- (car (send p1 get-pos)) (/ (send p1 get-sizex) 2))
                       ,(+ (car (send p1 get-pos)) (/ (send p1 get-sizex) 2))))
-         (hash-set! i-x p2
-                    `(,(- (car (send p2 get-pos)) (/ (send p2 get-sizex) 2))
-                      ,(+ (car (send p2 get-pos)) (/ (send p2 get-sizex) 2))))
          (hash-set! i-y p1
                     `(,(- (cadr (send p1 get-pos)) (/ (send p1 get-sizey) 2))
                       ,(+ (cadr (send p1 get-pos)) (/ (send p1 get-sizey) 2))))
+         
+         (hash-set! i-x p2
+                    `(,(- (car (send p2 get-pos)) (/ (send p2 get-sizex) 2))
+                      ,(+ (car (send p2 get-pos)) (/ (send p2 get-sizex) 2))))
          (hash-set! i-y p2
                     `(,(- (cadr (send p2 get-pos)) (/ (send p2 get-sizey) 2))
                       ,(+ (cadr (send p2 get-pos)) (/ (send p2 get-sizey) 2))))
          
+         (hash-set! i-x plat1
+                    `(,(- (car (send plat1 get-pos)) (/ (send plat1 get-sizex) 2))
+                      ,(+ (car (send plat1 get-pos)) (/ (send plat1 get-sizex) 2))))
+         (hash-set! i-y plat1
+                    `(,(- (cadr (send plat1 get-pos)) (/ (send plat1 get-sizey) 2))
+                      ,(+ (cadr (send plat1 get-pos)) (/ (send plat1 get-sizey) 2))))
+         
+         (hash-set! i-x plat2
+                    `(,(- (car (send plat2 get-pos)) (/ (send plat2 get-sizex) 2))
+                      ,(+ (car (send plat2 get-pos)) (/ (send plat2 get-sizex) 2))))
+         (hash-set! i-y plat2
+                    `(,(- (cadr (send plat2 get-pos)) (/ (send plat2 get-sizey) 2))
+                      ,(+ (cadr (send plat2 get-pos)) (/ (send plat2 get-sizey) 2))))
          ;         (when (and (between? (hash-ref i-x p1) (car (hash-ref i-x p2)))
          ;                    (or (between? (hash-ref i-y p1) (car (hash-ref i-y p2)))
          ;                        (between? (hash-ref i-y p1) (cadr (hash-ref i-y p2)))))
@@ -27,25 +43,30 @@
          (master-when p1 p2 i-x (< (send p1 get-health) (send p2 get-health)) car -)
          (master-when p1 p2 i-x (< (send p1 get-health) (send p2 get-health)) cadr -)
          (master-when p1 p2 i-y #f car -) ;p1-up p2-down
-         (master-when p2 p1 i-y #f car -))) ;p1-down p2-up
+         (master-when p2 p1 i-y #f car -)
+         (master-when plat1 p1 i-x #t car -)
+         (master-when plat1 p1 i-x #t cadr -)
+         (master-when plat1 p1 i-y #t car -)
+         (master-when p1 plat1 i-y #f car -)));p1-down p2-up
+
 ;(master-when p1 p2 i-y car)
 ;(master-when p1 p2 i-y cadr))) ;p1-right p2-left
 
 (define i-x (make-hash))
 (define i-y (make-hash))
 
-         (hash-set! i-x p1
-                    `(,(- (car (send p1 get-pos)) (/ (send p1 get-sizex) 2))
-                      ,(+ (car (send p1 get-pos)) (/ (send p1 get-sizex) 2))))
-         (hash-set! i-x p2
-                    `(,(- (car (send p2 get-pos)) (/ (send p2 get-sizex) 2))
-                      ,(+ (car (send p2 get-pos)) (/ (send p2 get-sizex) 2))))
-         (hash-set! i-y p1
-                    `(,(- (cadr (send p1 get-pos)) (/ (send p1 get-sizey) 2))
-                      ,(+ (cadr (send p1 get-pos)) (/ (send p1 get-sizey) 2))))
-         (hash-set! i-y p2
-                    `(,(- (cadr (send p2 get-pos)) (/ (send p2 get-sizey) 2))
-                      ,(+ (cadr (send p2 get-pos)) (/ (send p2 get-sizey) 2))))
+(hash-set! i-x p1
+           `(,(- (car (send p1 get-pos)) (/ (send p1 get-sizex) 2))
+             ,(+ (car (send p1 get-pos)) (/ (send p1 get-sizex) 2))))
+(hash-set! i-x p2
+           `(,(- (car (send p2 get-pos)) (/ (send p2 get-sizex) 2))
+             ,(+ (car (send p2 get-pos)) (/ (send p2 get-sizex) 2))))
+(hash-set! i-y p1
+           `(,(- (cadr (send p1 get-pos)) (/ (send p1 get-sizey) 2))
+             ,(+ (cadr (send p1 get-pos)) (/ (send p1 get-sizey) 2))))
+(hash-set! i-y p2
+           `(,(- (cadr (send p2 get-pos)) (/ (send p2 get-sizey) 2))
+             ,(+ (cadr (send p2 get-pos)) (/ (send p2 get-sizey) 2))))
 
 
 (define collide? (make-hash))
@@ -56,8 +77,6 @@
 (define (master-when object1 object2 hash req? car? sign)
   (let ((otherside (if (equal? hash i-x) i-y
                        i-x))
-        (othercar (if (equal? car? car) cadr
-                      car))
         (othersign (if (equal? sign +) - +)))
     (when (and (between? (hash-ref hash object1)
                          (car? (hash-ref hash object2)))

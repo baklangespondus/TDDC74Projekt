@@ -10,7 +10,7 @@
                 [speedx 0]              [speedy 0]
                 [gravity 0]             [acc 0.5]
                 [color "ff0000"]        [armor 0]
-                [sizex 0]              [sizey 0]
+                [sizex 50]              [sizey 200]
                 [posx 0]                [posy 0])
 
     (define/public (get-name) name)
@@ -21,7 +21,7 @@
     (define/public (set-health! hp) (set! health hp))
     (define/public (get-sizex) sizex)
     (define/public (get-sizey) sizey)
-    (define/public (get-acc) acc)
+    (define/public (get-color) color)
 
     (define/public (move button)
       (cond
@@ -41,12 +41,18 @@
           (begin (set! sizex 0)
                  (set! sizey 0))
           #f))
-          
-    (define/public (set-speedx! newspeed)
+
+    (define/public (set-speedx-super! newspeed)
       (set! speedx newspeed))
+
+    (define/public (set-speedy-super! newspeed)
+      (set! speedy newspeed))
+
+    (define/public (set-speedx! newspeed)
+      (set! speedx (+ speedx newspeed)))
     
     (define/public (set-speedy! newspeed)
-      (set! speedy newspeed))
+      (set! speedy (+ speedy newspeed)))
 
     (define/public (set-armor! delta)
       (set! armor (+ armor delta)))
@@ -63,37 +69,10 @@
       (begin (set! posx x)
              (set! posy y)))
     
-    (define/public (set-pos-list! lst)
-      (begin (set! posx (car lst))
-             (set! posy (cadr lst))))
-    
-    
     (super-new)))
-
-(define p1
-  (new player%
-       [speedx 1]
-       [gravity 1]
-       [posx 250]
-       [posy 500]
-       [sizex 20]
-       [sizey 20]))
-
-(define p2
-  (new player%
-       [speedx 1]
-       [gravity 1]
-       [posx 500]
-       [posy 500]
-       [sizex 100]
-       [sizey 50]))
 
 ;(define (main)
 ;  (big-bang (send p1 get-pos)
 ;    [to-draw place-player-at]
 ;    [on-key moveworld]))
 
-
-
-(define (moveworld w key)
-  (send p1 move w key))

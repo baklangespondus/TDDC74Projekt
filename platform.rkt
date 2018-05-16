@@ -1,24 +1,23 @@
 #lang racket
-(require "player.rkt")
-(require 2htdp/image)
-(provide (all-defined-out))
 
-(define platform
-  (new player%
-       [name ""]
-       [health 0]
-       [speedx 0]
-       [speedy 0]
-       [gravity 0]
-       [acc 0]
-       [color "black"]
-       [armor 1000000000000000]
-       [sizex 50]
-       [sizey 50]
-       [posx 400]
-       [posy 300]))
+(require racket/serialize)
+(provide platform%)
 
-(define platform-draw1
-  (let ((plat (rectangle (send platform get-sizex)
-                                  (send platform get-sizey) "solid" "black")))
-    (beside plat plat plat)))
+(define platform%
+  (class object%
+    (init-field
+     [name "platform"]       [health 0]
+     [speedx 0]              [speedy 0]
+     [color "ff0000"]        
+     [sizex 50]              [sizey 200]
+     [posx 0]                [posy 0])
+
+     (define/public (get-name) name)
+     (define/public (get-health) health)
+     (define/public (get-pos) `(,posx ,posy))
+     (define/public (get-speed) `(,speedx ,speedy))
+     (define/public (get-sizex) sizex)
+     (define/public (get-sizey) sizey)
+     (define/public (get-color) color)
+
+     (super-new)))
