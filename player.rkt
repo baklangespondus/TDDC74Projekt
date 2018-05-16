@@ -8,9 +8,9 @@
   (class object%
     (init-field [name "player 1"]       [health 0]
                 [speedx 0]              [speedy 0]
-                [gravity 0]             
+                [gravity 0]             [acc 0.5]
                 [color "ff0000"]        [armor 0]
-                [sizex 50]              [sizey 200]
+                [sizex 0]              [sizey 0]
                 [posx 0]                [posy 0])
 
     (define/public (get-name) name)
@@ -21,11 +21,12 @@
     (define/public (set-health! hp) (set! health hp))
     (define/public (get-sizex) sizex)
     (define/public (get-sizey) sizey)
+    (define/public (get-acc) acc)
 
     (define/public (move button)
       (cond
-        ((key=? button "right") (set! posx (+ posx speedx)))
-        ((key=? button "left") (set! posx (- posx speedx)))
+        ((key=? button "right") (set! speedx (+ speedx acc)))
+        ((key=? button "left") (set! speedx (- speedx acc)))
         ;      ((key=? button "left") (set! posx (- posx speedx)))
         ((key=? button "up") (jump))
         (else 0)))
@@ -42,10 +43,10 @@
           #f))
           
     (define/public (set-speedx! newspeed)
-      (set! speedx (+ speedx newspeed)))
+      (set! speedx newspeed))
     
     (define/public (set-speedy! newspeed)
-      (set! speedy (+ speedy newspeed)))
+      (set! speedy newspeed))
 
     (define/public (set-armor! delta)
       (set! armor (+ armor delta)))
@@ -62,6 +63,11 @@
       (begin (set! posx x)
              (set! posy y)))
     
+    (define/public (set-pos-list! lst)
+      (begin (set! posx (car lst))
+             (set! posy (cadr lst))))
+    
+    
     (super-new)))
 
 (define p1
@@ -69,30 +75,25 @@
        [speedx 1]
        [gravity 1]
        [posx 250]
-       [posy 500]))
+       [posy 500]
+       [sizex 20]
+       [sizey 20]))
 
 (define p2
   (new player%
        [speedx 1]
        [gravity 1]
        [posx 500]
-       [posy 500]))
+       [posy 500]
+       [sizex 100]
+       [sizey 50]))
 
 ;(define (main)
 ;  (big-bang (send p1 get-pos)
 ;    [to-draw place-player-at]
 ;    [on-key moveworld]))
 
-(define (draw-pos s)
-  (and (place-image (rectangle (send p1 get-sizex) (send p1 get-sizey) "solid" "red")
-                    (car (send p1 get-pos))
-                    (car (cdr (send p1 get-pos)))
-               
-                    (place-image (rectangle (send p2 get-sizex) (send p2 get-sizey) "solid" "blue")
-                                 (car (send p2 get-pos))
-                                 (car (cdr (send p2 get-pos)))
-                                 (empty-scene 800 600)))))
-  
+
 
 (define (moveworld w key)
   (send p1 move w key))
