@@ -8,23 +8,23 @@
        [posx 250]
        [posy 500]
        [color "orange"]
-       [sizex 200]
-       [sizey 40]))
+       [sizex 500]
+       [sizey 50]))
 
 (define plat2
   (new platform%
        [name "deathfloor"]
        [posx 400]
        [posy 600]
-       [sizex 800]
-       [sizey 40]
+       [sizex 50]
+       [sizey 50]
        [color "black"]))
 
 (define p1
   (new player%
        [speedx 1]
        [gravity 1]
-       [posx 250]
+       [posx 100]
        [posy 500]
        [color "blue"]))
 
