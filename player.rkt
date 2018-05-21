@@ -15,31 +15,29 @@
     (define/public (get-name) name)
     (define/public (get-health) health)
     (define/public (damaged) (begin (set! health (- health (- 10 armor)))
-                                    (display health)))
+                                    (display health)
+                                    (set! color "black")))
     (define/public (get-pos) `(,posx ,posy))
     (define/public (get-speed) `(,speedx ,speedy))
     (define/public (set-health! hp) (set! health hp))
     (define/public (get-sizex) sizex)
     (define/public (get-sizey) sizey)
     (define/public (get-color) color)
+    (define/public (set-color! clr) (set! color clr)) 
 
     (define/public (move button)
       (cond
         ((key=? button "right") (set! speedx (+ speedx acc)))
         ((key=? button "left") (set! speedx (- speedx acc)))
         ;      ((key=? button "left") (set! posx (- posx speedx)))
-        ((key=? button "up") (begin (set! speedy -1)
+        ((key=? button "up") (begin (set! speedy -1.7)
                              (set! posy (+ posy speedy))))
         (else 0)))
-    
-
 
     (define/public (death)
-      (if (<= (send this get-health) 0)
           (begin (set! sizex 0)
-                 (set! sizey 0))
-          #f))
-
+                 (set! sizey 0)))
+    
     (define/public (set-speedx-super! newspeed)
       (set! speedx newspeed))
 

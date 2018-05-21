@@ -8,7 +8,7 @@
        [posx 250]
        [posy 500]
        [color "orange"]
-       [sizex 500]
+       [sizex 300]
        [sizey 50]))
 
 (define plat2
@@ -20,49 +20,67 @@
        [sizey 50]
        [color "black"]))
 
+(define plat3
+  (new platform%
+       [posx 700]
+       [posy 100]
+       [sizex 200]
+       [sizey 50]
+       [color "orange"]))
+
+(define plat4
+  (new platform%
+       [posx 400]
+       [posy 300]
+       [sizex 300]
+       [sizey 50]
+       [color "orange"]))
+
 (define walll
-    (new platform%
+  (new platform%
        [name "Right-Wall"]
        [posx 799]
        [posy 400]
        [sizex 20]
        [sizey 1000]
-       [color "orange"]))
+       [color "white"]))
 
 (define wallr
-    (new platform%
+  (new platform%
        [name "Left-Wall"]
        [posx 0]
        [posy 400]
        [sizex 20]
        [sizey 1000]
-       [color "orange"]))
+       [color "white"]))
   
-  (define wallup
-    (new platform%
+(define wallup
+  (new platform%
        [name "Top-Wall"]
        [posx 400]
        [posy 0]
        [sizex 1000]
        [sizey 50]
-       [color "orange"]))
+       [color "white"]))
 
 (define p1
   (new player%
+       [name "Player 1"]
        [speedx 1]
        [gravity 1]
        [posx 100]
        [posy 500]
-       [sizex 50]
-       [sizey 80]
+       [sizex 30]
+       [sizey 50]
        [color "blue"]))
 
 (define p2
   (new player%
+       [name "Player 2"]
        [speedx 1]
        [gravity 1]
        [posx 500]
        [posy 500]
-       [sizex 50]
-       [sizey 80]
+       [sizex 30]
+       [sizey 50]
        [color "red"]))
